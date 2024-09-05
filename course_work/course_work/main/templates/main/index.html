@@ -1,0 +1,39 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+    <h1>Австосалоны "ROLF"</h1>
+    <div class="main__wrapper">
+        <p class="main_text">
+                Добро пожаловать в сеть автосалонов ROLF, где каждый найдет себе идеальный автомобиль! Мы предлагаем широкий ассортимент новых и подержанных автомобилей ведущих мировых брендов, гарантируя высокое качество и надежность каждой машины.
+            <br><br>
+            Наши клиенты получают:
+            <br>
+            - Профессиональную консультацию от опытных специалистов
+            <br>
+            - Индивидуальный подход и помощь в выборе автомобиля
+            <br>
+            - Выгодные условия кредитования и лизинга
+            <br>
+            - Полный спектр сервисных услуг и технического обслуживания
+            <br>
+            <br>
+            ROLF – это не просто автосалон, это ваш помощник и партнер на пути к мечте. Посетите нас сегодня и откройте для себя мир комфорта и безопасности с вашим новым автомобилем!
+            <br>
+            <br>
+            ROLF – Дорога к вашей мечте начинается здесь!</p>
+            <div class="slider-container main_photo">
+                <div class="slider">
+                  <img src="{% static 'main/img/5.jpg' %}" width="600" height="400" alt="1 фото">
+                  <img src="{% static 'main/img/2.jpg' %}" width="600" height="400" alt="2 фото">
+                  <img src="{% static 'main/img/3.jpg' %}" width="600" height="400" alt="3 фото">
+                  <img src="{% static 'main/img/4.jpg' %}" width="600" height="400" alt="4 фото">
+                  <img src="{% static 'main/img/main_photo.jpg' %}" width="600" height="400" alt="5 фото">
+                </div>
+                <button class="prev-button" type="button" aria-label="Посмотреть предыдущий слайд">&lt;</button>
+                <button class="next-button" type="button" aria-label="Посмотреть следующий слайд">&gt;</button>
+              </div>
+        </div>
+{% endblock %}

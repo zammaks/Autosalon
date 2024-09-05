@@ -1,0 +1,28 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Добавление отзыва{% endblock %}
+
+{% block content %}
+<div class="auto__wrapper">
+    <h1>Добавить отзыв</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <a class="btn btn-outline-light ml-lg-3 add" href="{% url 'review_list' %}">Отмена</a>
+        <button type="submit" class="btn btn-outline-light ml-lg-3 add">Сохранить</button>
+    </form>
+    
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

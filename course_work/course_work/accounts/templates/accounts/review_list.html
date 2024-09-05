@@ -1,0 +1,35 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Отзывы{% endblock %}
+
+{% block content %}
+<div class="auto__wrapper">
+        <h1>Отзывы</h1>
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_review' %}" class="btn btn-outline-light ml-lg-3" style="margin-left: 200px; margin-top: 10px;">Добавить отзыв</a>
+        {% endif %}
+        <div class="reviews">
+            {% for review in reviews %}
+                <div class="review">
+                    <h3 class="review__title">{{ review.title }}</h3>
+                    <p class="review__text">{{ review.text }}</p>
+                    <p class="review__info"><strong>Автор:</strong> {{ review.author.username }}</p>
+                    <p class="review__info"><strong>Дата и время:</strong> {{ review.created_at }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

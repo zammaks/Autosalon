@@ -1,0 +1,27 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block content %}
+<div class="auto__wrapper">
+    <h1>Контакты</h1>
+    <div class="contact__wrapper">
+        <div class="contact__info">
+            <p class="contacts">Адрес: 129301, г. Москва, проспект Мира, 186Ас1 </p>
+            <p class="contacts">Телефон: +7 (952) 157-15-15 </p>
+            <p class="contacts">Электроная почта: rolf_auto@mail.ru </p>
+            <p class="contacts">Tелеграм-канал: t.me/@rolf_auto </p>
+        </div>
+        <div style="position:relative;overflow:hidden;"><a
+                href="https://yandex.ru/maps/213/moscow/?utm_medium=mapframe&utm_source=maps"
+                style="color:#eee;font-size:12px;position:absolute;top:0px;">Москва</a><a
+                href="https://yandex.ru/maps/213/moscow/?ll=37.687037%2C55.823004&mode=whatshere&utm_medium=mapframe&utm_source=maps&whatshere%5Bpoint%5D=37.651829%2C55.828474&whatshere%5Bzoom%5D=15.88&z=12.38"
+                style="color:#eee;font-size:12px;position:absolute;top:14px;">Яндекс Карты — транспорт, навигация, поиск
+                мест</a><iframe
+                src="https://yandex.ru/map-widget/v1/?ll=37.687037%2C55.823004&mode=whatshere&whatshere%5Bpoint%5D=37.651829%2C55.828474&whatshere%5Bzoom%5D=15.88&z=12.38"
+                width="560" height="400" frameborder="1" allowfullscreen="true" style="position:relative; border-radius: 10px;"></iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}

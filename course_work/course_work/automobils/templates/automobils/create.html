@@ -1,0 +1,28 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Добавление объвления{% endblock %}
+
+{% block content %}
+<div class="auto__wrapper">
+    <h1>Добавление объявления</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.title }}
+        {{ form.model }}
+        {{ form.image }}
+        {{ form.color }}
+        {{ form.fabrication }}
+        {{ form.mileage }}
+        {{ form.full_text }}
+        {{ form.date }}
+        {{ form.price }}
+        <span>{{ error }}</span>
+        <a href="{% url 'auto' %}" class="btn btn-outline-light ml-lg-3 add" style="margin-right: 20px; background-color: orange;">Отмена</a>
+        <button class="btn btn-outline-light ml-lg-3 add" type="submit" style="background-color: green;">Опубликовать</button>
+
+    </form>
+    
+</div>
+{% endblock %}
+

@@ -1,0 +1,29 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Салоны{% endblock %}
+
+{% block content %}
+<div class="auto__wrapper">
+    <body>
+        <h1>Добавить новый салон</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-outline-light ml-lg-3" style="margin-left: 200px; width:  200px;">Сохранить</button>
+        </form>
+    </body>
+    
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

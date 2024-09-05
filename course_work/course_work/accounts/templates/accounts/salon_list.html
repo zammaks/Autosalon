@@ -1,0 +1,58 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Салоны{% endblock %}
+
+{% block content %}
+<div class="auto__wrapper">
+    <h1>Салоны</h1>
+    <form method="get" class="form-inline">
+        {{ form.city.label_tag }} {{ form.city }}
+        <button type="submit" class="btn btn-outline-light ml-lg-3" style="margin-left: 200px; margin-bottom: 20px;">Выбрать</button>
+    </form>
+    {% if user.is_superuser %}
+        <a href="{% url 'add_salon' %}" class="btn btn-outline-light ml-lg-3" style="margin-left: 200px;">Добавить новый салон</a>
+    {% endif %}
+    <div class="salons">
+        {% if salons %}
+            <table class="table" style="width: 60%; margin: 20px auto; font-size: 1.8rem; ">
+                <thead>
+                    <tr>
+                        <th>Город</th>
+                        <th>Адрес</th>
+                        <th>Телефон</th>
+                        <th>Электронная почта</th>
+                        <th>Телеграм</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for salon in salons %}
+                        <tr>
+                            <td>{{ salon.city }}</td>
+                            <td>{{ salon.address }}</td>
+                            <td>{{ salon.phone }}</td>
+                            <td>{{ salon.email }}</td>
+                            <td>{{ salon.telegram }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div style="position:relative;overflow:hidden;"><a href="https://yandex.ru/maps/213/moscow/?utm_medium=mapframe&utm_source=maps" style="color:#eee;font-size:12px;position:absolute;top:0px;">Москва</a><a href="https://yandex.ru/maps/213/moscow/?ll=37.679280%2C55.751701&utm_medium=mapframe&utm_source=maps&z=12.38" style="color:#eee;font-size:12px;position:absolute;top:14px;">Москва — Яндекс Карты</a><iframe src="https://yandex.ru/map-widget/v1/?ll=37.679280%2C55.751701&z=12.38" width="560" height="400" frameborder="1" allowfullscreen="true" style="position:relative; border-radius: 10px;"></iframe></div>
+        {% else %}
+            <p>Салоны не найдены.</p>
+        {% endif %}
+    </div>
+    
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

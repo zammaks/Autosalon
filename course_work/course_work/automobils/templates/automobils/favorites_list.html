@@ -1,0 +1,32 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Избранные объявления{% endblock %}
+
+{% block content %}
+<div class="favorites__wrapper">
+    <h1>Избранные объявления</h1>
+    <div class="list__wrapper">
+        {% if favorite_ads %}
+            {% for ad in favorite_ads %}
+                <div class="favorite__elem__wrapper">
+                    <h2>{{ ad.announcement.title }} {{ ad.announcement.model }}</h2>
+                    {% if ad.announcement.image %}
+                        <img src="{{ ad.announcement.image.url }}" alt="{{ ad.announcement.title }}" class="img-fluid" style="width: 300px; height: 230px; object-fit: fill;">
+                    {% else %}
+                        <img src="{% static 'automobils/img/zaglushka.jpg' %}" alt="{{ ad.announcement.title }}" class="img-fluid stub">
+                    {% endif %}
+                    <p style="font-size: 1.5rem;">Дата добавления: {{ ad.date_added }}</p>
+                    <form action="{% url 'favorites-delete' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="favorite_ad_id" value="{{ ad.id }}">
+                        <button type="submit" class="btn btn-outline-light ml-lg-3 add" style="background-color: red; margin-bottom: 30px;">Удалить из избранного</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="font-size: 2rem;">Нет избранных объявлений.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}Удаление объявления{% endblock %}
+
+{% block content %}
+<div class="auto__wrapper">
+    <h1>Вы точно хотите удалить объявление?</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1>{{ announcement.title }} {{ announcement.model }}</h1>
+        {% if announcement.image %}
+            <img src="{{ announcement.image.url }}" alt="{{ announcement.title }}" class="img-fluid">
+        {% else %}
+            <img src="{% static 'automobils/img/zaglushka.jpg' %}" alt="{{ announcement.title }}" class="img-fluid stub">
+        {% endif %}
+        <div class="link__wrapper">
+            <a href="{% url 'announcement-detail' announcement.id %}" class="btn btn-outline-light ml-lg-3 add" style="margin-right: 20px; background-color: orange;">Отмена</a>
+            <button class="btn btn-outline-light ml-lg-3 add" type="submit" style="background-color: red;">Удалить объявление </button>
+        </div>
+    </form>
+    
+</div>
+{% endblock %}
+
