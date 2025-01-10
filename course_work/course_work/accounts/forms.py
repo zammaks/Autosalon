@@ -129,6 +129,14 @@ class ServiceForm(forms.ModelForm):
 
 
 
+class ServiceFilterForm(forms.Form):
+    client = forms.ModelChoiceField(queryset=Client.objects.all(), required=False, label="Выберите клиента")
+    min_price = forms.DecimalField(min_value=0, required=False, label="Минимальная цена", widget=forms.NumberInput(attrs={'step': '0.01'}))
+    max_price = forms.DecimalField(min_value=0, required=False, label="Максимальная цена", widget=forms.NumberInput(attrs={'step': '0.01'}))
+    max_days = forms.IntegerField(min_value=0, required=False, label="Максимальное время исполнения (дни)")
+    name = forms.CharField(max_length=200, required=False, label="Поиск по названию услуги")
+    
+
 
 
 

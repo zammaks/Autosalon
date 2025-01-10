@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from simple_history.models import HistoricalRecords
 from django.contrib.auth.models import User
 
 class Client(models.Model):
@@ -15,6 +16,8 @@ class Client(models.Model):
     birth_date = models.DateField(null=True, verbose_name="Дата рождения", blank=True)
     gender = models.CharField(max_length=1, verbose_name="Пол", choices=GENDER_CHOICES, null=True)
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = 'Клиент'
@@ -33,6 +36,8 @@ class Review(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата и время добавления")
 
+    history = HistoricalRecords()
+
     class Meta:
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
@@ -48,6 +53,8 @@ class Service(models.Model):
     execution_time = models.IntegerField(verbose_name="Время исполнения (в днях)")
     clients = models.ManyToManyField(Client, related_name='services', verbose_name="Клиенты")
 
+    history = HistoricalRecords()
+
     class Meta:
         verbose_name = "Услуга"
         verbose_name_plural = "Услуги"
@@ -62,6 +69,8 @@ class Salon(models.Model):
     phone = models.CharField(max_length=20, verbose_name="Телефон")
     email = models.EmailField(verbose_name="Электронная почта")
     telegram = models.CharField(max_length=50, verbose_name="Телеграм")
+
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Салон"

@@ -1,15 +1,28 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from rest_framework.routers import DefaultRouter
+from .views import ClientViewSet, ReviewViewSet
 
+# Создаем роутер и регистрируем ViewSets
+router = DefaultRouter()
+router.register(r'clients', ClientViewSet, basename='client')
+router.register(r'reviews', ReviewViewSet, basename='review')
+
+# Подключаем маршруты из роутера
+urlpatterns = [
+    path('', include(router.urls)),
+]
+# views.review_list
 urlpatterns = [
     path('register', views.register, name='register'),
     path('login', views.login_view, name='login'),
     path('logout', views.user_logout, name='logout'),
-    path('reviews', views.review_list, name='review_list'),
+    path('reviews/', views.reviews_view, name='review_list'),
     path('reviews/add', views.add_review, name='add_review'),
     path('client/<int:client_id>/services/', views.client_services, name='client_services'),
     path('client/<int:client_id>/add_service/', views.add_service, name='add_service'),
     path('salons/', views.salon_list, name='salon_list'),
     path('salons/add/', views.add_salon, name='add_salon'),
+    path('', include(router.urls)),
 
 ]

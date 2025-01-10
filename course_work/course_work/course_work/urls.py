@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('automobils/', include('automobils.urls')),
     path('accounts/', include('accounts.urls')),
+    path('api/accounts/', include('accounts.urls')),  # Подключение API для приложения accounts
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
