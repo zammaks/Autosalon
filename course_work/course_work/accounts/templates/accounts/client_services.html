@@ -7,72 +7,55 @@
     <h1>Услуги клиента: {{ client.first_name }} {{ client.last_name }}</h1>
 
     {% if user.is_authenticated %}
-        <a href="{% url 'add_service' client.id %}" class="btn btn-outline-light ml-lg-3" style="text-align: center; margin: 20px; margin-left: 150px;">Добавить услугу</a>
+    <a href="{% url 'add_service' client.id %}" class="btn btn-outline-light ml-lg-3"
+        style="text-align: center; margin: 20px; margin-left: 150px;">Добавить услугу</a>
     {% endif %}
 
     <form method="get" class="form-inline">
         {% csrf_token %}
-        
-        <!-- Поле для выбора клиента -->
-        <div class="form-group">
-            {{ form.client.label_tag }} 
-            {{ form.client }}
-        </div>
-
-        <!-- Поле для поиска по названию и описанию -->
-        <div class="form-group" style="margin-left: -88px;margin-top: 10px; ">
-            {{ form.name.label_tag }}
-            {{ form.name }}
-        </div>
-
-        <!-- Поле для минимальной цены -->
-        <div class="form-group" style="margin-left: -22px;margin-top: 10px;">
-            {{ form.min_price.label_tag }}
-            {{ form.min_price }}
-        </div>
-
-        <!-- Поле для максимальной цены -->
-        <div class="form-group" style="margin-left: -28px;margin-top: 10px;">
-            {{ form.max_price.label_tag }}
-            {{ form.max_price }}
-        </div>
-
-        <!-- Поле для максимального количества дней -->
-        <div class="form-group" style="margin-left: -208px;margin-top: 10px;margin-bottom: 30px;">
-            {{ form.max_days.label_tag }}
-            {{ form.max_days }}
-        </div>
-
-        <button type="submit" class="btn btn-outline-light ml-lg-3" style="margin-left: 130px; width: 150px; margin-bottom: 15px;">Применить фильтры</button>
-        
-        <!-- Кнопка для сброса фильтров -->
-        <a href="{% url 'client_services' client.id %}" class="btn btn-outline-light ml-lg-3" style="width: 150px; margin-bottom: 15px;">Сбросить фильтры</a>
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-outline-light ml-lg-3"
+            style="margin-left: 130px; width: 150px; margin-bottom: 15px;">Применить фильтры</button>
+        <a href="{% url 'client_services' client.id %}" class="btn btn-outline-light ml-lg-3"
+            style="width: 150px; margin-bottom: 15px;">Сбросить фильтры</a>
     </form>
 
     <div class="services">
         {% if services %}
-            <table class="table" style="width: 70%; margin: 10px auto;">
-                <thead>
-                    <tr>
-                        <th>Название</th>
-                        <th>Описание</th>
-                        <th>Цена, p</th>
-                        <th>Время исполнения (дни)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for service in services %}
-                        <tr>
-                            <td>{{ service.name }}</td>
-                            <td>{{ service.description }}</td>
-                            <td>{{ service.price }}</td>
-                            <td>{{ service.execution_time }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+
+        <table class="table" style="width: 70%; margin: 10px auto;">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Цена, p</th>
+                    <th>Время исполнения (дни)</th>
+                    <th>Выполнено</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <td>{{ service.name }}</td>
+                    <td>{{ service.description }}</td>
+                    <td>{{ service.price }}</td>
+                    <td>{{ service.execution_time }}</td>
+                    <td>
+                        <!-- <form method="POST" action="{% url 'service-toggle-completion' pk=service.id %}"> -->
+
+
+                        <input type="checkbox" {% if service.is_completed %}checked{% endif %} disabled style="border-color: blue;">
+                        <!-- <button type="submit" class="btn btn-outline-light">Выполнить</button> -->
+                        <!-- </form> -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- <button type="submit" class="btn btn-outline-light ml-lg-3">Обновить статус</button> -->
+        </form>
         {% else %}
-            <p>У клиента пока нет услуг, соответствующих фильтрам.</p>
+        <p>У клиента пока нет услуг, соответствующих фильтрам.</p>
         {% endif %}
     </div>
 </div>

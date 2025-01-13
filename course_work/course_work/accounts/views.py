@@ -20,6 +20,14 @@ from django.db.models import Q
 from .forms import ServiceFilterForm
 from django.core.paginator import Paginator
 from django.shortcuts import render
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from .models import Service
+from django.contrib.auth.decorators import login_required
+from .forms import ServiceForm
+from .serializers import ServiceSerializer 
+
+
 
 def reviews_view(request):
     # Получаем все отзывы, отсортированные по дате
@@ -53,7 +61,31 @@ class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     # permission_classes = [IsAuthenticatedOrReadOnly]
 
+    @action(methods=['GET'], detail=False)
+    def my_reviews(self, request):
+        """
+        Возвращает отзывы текущего авторизованного пользователя.
+        """
+        user = request.user  # Получаем текущего пользователя
+        reviews = Review.objects.filter(author=user)  # Отфильтровываем по автору
+        serializer = self.get_serializer(reviews, many=True)
+        return Response(serializer.data)
+    
+class ServiceViewSet(viewsets.ModelViewSet):
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
 
+    # Другие действия для Service (например, list, create, etc.)
+
+    @action(methods=['POST'], detail=True, url_path='toggle-completion', url_name='toggle-completion')
+    def toggle_completion(self, request, pk=None):
+        service = self.get_object()
+        service.is_completed = not service.is_completed
+        service.save()
+        return Response({
+            'status': 'success',
+            'is_completed': service.is_completed
+        })
 
 def register(request):
     if request.method == 'POST':
@@ -108,149 +140,65 @@ def add_review(request):
 
 
 
-
-
-
-
-
-# def client_services(request, client_id):
-#     client = get_object_or_404(Client, id=client_id)
-#     services = client.services.all()  # Получаем все услуги клиента
-
-#     context = {
-#         'client': client,
-#         'services': services,  # Передаем услуги в контекст
-#     }
-#     return render(request, 'accounts/client_services.html', context)
-
-
-
-
-
-
-# def add_service(request, client_id):
-#     client = get_object_or_404(Client, id=client_id)
-
-#     if request.method == 'POST':
-#         form = ServiceForm(request.POST)
-#         if form.is_valid():
-#             service = form.save(commit=False)
-#             service.save()
-#             client.services.add(service)
-#             return redirect('client_services', client_id=client.id)
-#     else:
-#         form = ServiceForm()
-
-#     context = {
-#         'client': client,
-#         'form': form,
-#     }
-#     return render(request, 'accounts/add_service.html', context)
-
-# def service_list(request):
-#     form = ServiceFilterForm(request.GET)
-#     services = Service.objects.all()
-
-#     if form.is_valid():
-#         # Получаем фильтры из формы
-#         client = form.cleaned_data.get('client')
-#         min_price = form.cleaned_data.get('min_price')
-#         max_price = form.cleaned_data.get('max_price')
-#         max_days = form.cleaned_data.get('max_days')
-
-#         # Формируем фильтр с использованием Q объектов
-#         filter_conditions = Q()
-
-#         if client:
-#             filter_conditions &= Q(clients=client)
-
-#         if min_price is not None:
-#             filter_conditions &= Q(price__gte=min_price)
-
-#         if max_price is not None:
-#             filter_conditions &= Q(price__lte=max_price)
-
-#         if max_days is not None:
-#             filter_conditions &= Q(execution_time__lte=max_days)
-
-#         # Применяем фильтрацию с условием OR для определенных полей
-#         services = services.filter(filter_conditions)
-
-#     return render(request, 'your_template.html', {
-#         'form': form,
-#         'services': services,
-#     })
-
-
-
-
-# def client_services(request, client_id):
-#     client = get_object_or_404(Client, id=client_id)
-#     services = client.services.all()  # Получаем все услуги клиента
-
-#     if request.method == 'POST':
-#         form = ClientSelectForm(request.POST)
-#         if form.is_valid():
-#             selected_client = form.cleaned_data['client']
-#             return redirect('client_services', client_id=selected_client.id)
-#     else:
-#         form = ClientSelectForm(initial={'client': client})
-
-#     context = {
-#         'client': client,
-#         'services': services,  # Передаем услуги в контекст
-#         'form': form,  # Передаем форму в контекст
-#     }
-#     return render(request, 'accounts/client_services.html', context)
-
-
 def client_services(request, client_id):
     client = get_object_or_404(Client, id=client_id)
     services = client.services.all()  # Получаем все услуги клиента
 
-    # Форма для выбора клиента и фильтрации услуг
+    # Форма для фильтрации
     form = ServiceFilterForm(request.GET)
-    
+
     # Если форма отправлена
     if form.is_valid():
-        # Получаем фильтры из формы
+        # Получаем данные из формы
         selected_client = form.cleaned_data.get('client')
         min_price = form.cleaned_data.get('min_price')
         max_price = form.cleaned_data.get('max_price')
         max_days = form.cleaned_data.get('max_days')
         name = form.cleaned_data.get('name')
+        is_completed = form.cleaned_data.get('is_completed')
 
         # Если выбран другой клиент, перенаправляем на его страницу
         if selected_client:
             return redirect('client_services', client_id=selected_client.id)
 
-        # Применяем фильтрацию
+        # Применяем фильтры
         filter_conditions = Q()
 
-        # Фильтруем по названию и описанию услуги (OR)
+        # Фильтр по названию или описанию услуги (OR)
         if name:
-            filter_conditions |= Q(name__icontains=name)  # Ищем по части названия
-            filter_conditions |= Q(description__icontains=name)  # Ищем по части описания
+            filter_conditions |= Q(name__icontains=name) | Q(description__icontains=name)
 
-        # Фильтруем по цене
+        # Фильтр по цене
         if min_price is not None:
             filter_conditions &= Q(price__gte=min_price)
-
         if max_price is not None:
             filter_conditions &= Q(price__lte=max_price)
 
-        # Фильтруем по времени исполнения
+        # Фильтр по времени исполнения
         if max_days is not None:
             filter_conditions &= Q(execution_time__lte=max_days)
 
-        # Применяем фильтрацию только к услугам выбранного клиента
+        # Фильтр по статусу выполнения
+        if is_completed == 'completed':
+            filter_conditions &= Q(is_completed=True)
+        elif is_completed == 'not_completed':
+            filter_conditions &= Q(is_completed=False)
+
+        # Применяем фильтрацию
         services = services.filter(filter_conditions)
 
-    # Передаем данные формы и оставляем их в полях
+        # Пример сложного запроса с использованием OR, AND, NOT
+        # # Например: услуги с определённым именем, ИЛИ услуги, у которых цена ниже 1000, НО не выполнены.
+        # first_complex_query = (Q(name__icontains='special') | Q(price__lt=1000)) & ~Q(is_completed=True)
+        # second_complex_query = (Q(name__icontains='special') & ~Q(price__lt=1000)) & ~Q(is_completed=True)
+        # filter_conditions &= complex_query
+
+
+    # Контекст для шаблона
     context = {
         'client': client,
         'services': services,
-        'form': form,  # Передаем форму с данными фильтрации
+        'form': form,  # Передаём форму для фильтрации
     }
 
     return render(request, 'accounts/client_services.html', context)

@@ -10,7 +10,7 @@
         {% csrf_token %}
         <h1>{{ announcement.title }} {{ announcement.model }}</h1>
         {% if announcement.image %}
-            <img src="{{ announcement.image.url }}" alt="{{ announcement.title }}" class="img-fluid">
+            <img src="{% static announcement.image.url|cut:'/automobils/static/' %}" alt="{{ announcement.title }}" class="img-fluid">
         {% else %}
             <img src="{% static 'automobils/img/zaglushka.jpg' %}" alt="{{ announcement.title }}" class="img-fluid stub">
         {% endif %}

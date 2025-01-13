@@ -15,12 +15,9 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class ServiceSerializer(serializers.ModelSerializer):
-    # Чтобы отображать связанных клиентов (многие-ко-многим) в удобном формате:
-    clients = ClientSerializer(many=True, read_only=True)  
-
     class Meta:
         model = Service
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'price', 'execution_time', 'is_completed', 'clients']  # укажите все поля, которые вам нужны 
 
 
 class SalonSerializer(serializers.ModelSerializer):

@@ -6,10 +6,43 @@
 {% block content %}
 <div class="auto__wrapper">
     <h1>Объявления о продаже автомобилей</h1>
+    
+    <!-- Форма фильтрации -->
+    <form method="GET" class="filters-form">
+        <div class="filter">
+            <label for="brand" style="margin-left: 13px; margin-bottom: 15px;margin-top: 15px; margin-right: 10px;">Марка</label >
+            <select name="brand" id="brand" style=" width: 120px; height: 30px; font-size: 16px;">
+                <option value="">Все марки</option>
+                {% for brand in brands %}
+                    <option value="{{ brand }}" {% if selected_brand == brand %}selected{% endif %}>{{ brand }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="filter">
+            <label for="model"  style="margin-right: 10px;">Модель</label>
+            <select name="model" id="model" style=" width: 120px; height: 30px; font-size: 16px;">
+                <option value="" >Все модели</option>
+                {% for model in models %}
+                    <option value="{{ model }}" {% if selected_model == model %}selected{% endif %}>{{ model }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-buttons">
+            <button type="submit" class="btn btn-outline-light ml-lg-3 add mb-3" style=" width: 150px">Фильтровать</button>
+
+            <!-- Кнопка сброса фильтров -->
+            <a href="{% url 'auto' %}" class="reset-button btn btn-outline-light ml-lg-3 add mb-3" style=" width: 200px; margin-left: 50px; margin-right: -50px;">Сбросить фильтры</a>
+        </div>
+
+        <!-- <button type="submit" class="btn btn-outline-light ml-lg-3 add mb-3">Фильтровать</button> -->
+    </form>
+
     {% if user.is_authenticated %}
         <a href="{% url 'announcement-create' %}" class="btn btn-outline-light ml-lg-3 add">Разместить объявление</a>
         <a href="{% url 'favorites-list' %}" class="btn btn-outline-light ml-lg-3 add" style="margin-left:  50px;">Избранные объявления</a>
     {% endif %}
+
     <div class="list__wrapper">
         {% if automobils %}
             {% for el in automobils %}
@@ -24,7 +57,7 @@
                     <p class="fabrication">Дата выпуска: {{ el.fabrication }}</p>
                     <p class="price">Цена: {{ el.price }} ₽</p>
                     <p class="date">Дата публикации: {{ el.date }}</p>
-                    <a href="{% url 'announcement-detail' el.id %}" class="btn btn-outline-light ml-lg-3 add" style="width: 150px; margin-left: 150px; margin-top: 25px; height: 35px; padding: 2px;">Подробнее..</a>
+                    <a href="{% url 'automobil-detail' el.id %}" class="btn btn-outline-light ml-lg-3 add" style="width: 150px; margin-left: 150px; margin-top: 25px; height: 35px; padding: 2px;">Подробнее..</a>
                 </div>
             {% endfor %}
         {% else %}

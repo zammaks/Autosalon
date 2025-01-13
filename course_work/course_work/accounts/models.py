@@ -51,6 +51,7 @@ class Service(models.Model):
     description = models.TextField(verbose_name="Описание услуги")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена услуги")
     execution_time = models.IntegerField(verbose_name="Время исполнения (в днях)")
+    is_completed = models.BooleanField(default=False, verbose_name="Выполнена")
     clients = models.ManyToManyField(Client, related_name='services', verbose_name="Клиенты")
 
     history = HistoricalRecords()

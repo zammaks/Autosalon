@@ -12,7 +12,8 @@
                 <div class="favorite__elem__wrapper">
                     <h2>{{ ad.announcement.title }} {{ ad.announcement.model }}</h2>
                     {% if ad.announcement.image %}
-                        <img src="{{ ad.announcement.image.url }}" alt="{{ ad.announcement.title }}" class="img-fluid" style="width: 300px; height: 230px; object-fit: fill;">
+                        <!-- <img src="{{ ad.announcement.image.url }}"  alt="{{ ad.announcement.title }}" class="img-fluid" style="width: 300px; height: 230px; object-fit: fill;"> -->
+                        <img src="{% static ad.announcement.image.url|cut:'/automobils/static/' %}" alt="{{ ad.announcement.title }}" class="img-fluid" style="width: 300px; height: 230px; object-fit: fill;">
                     {% else %}
                         <img src="{% static 'automobils/img/zaglushka.jpg' %}" alt="{{ ad.announcement.title }}" class="img-fluid stub">
                     {% endif %}

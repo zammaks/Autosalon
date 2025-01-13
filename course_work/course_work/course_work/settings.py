@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'main',
     'automobils',
     'rest_framework',
+    'django_extensions',
     'import_export',
     'simple_history',
     'django.contrib.admin',
@@ -85,6 +86,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'USER': 'myuser',
+        'PASSWORD': 'mypassword',
+        'HOST': 'db',  # Это имя сервиса базы данных из docker-compose.yml
+        'PORT': '5432',
     }
 }
 

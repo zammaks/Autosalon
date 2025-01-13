@@ -37,23 +37,127 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Client, Review
 from .models import Service,Salon
 
+# class UserRegistrationForm(UserCreationForm):
+#     email = forms.EmailField(label='',required=True, widget=forms.EmailInput(attrs={'class': 'form-control','placeholder': 'Электронная почта'}))
+#     first_name = forms.CharField(label='', max_length=128, required=True, widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Имя'}))
+#     last_name = forms.CharField(label='', max_length=128, required=True, widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Фамилия'}))
+#     second_name = forms.CharField(label='', max_length=128, required=True, widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Отчество'}))
+#     phone_number = forms.CharField(label='', max_length=15, required=True, widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Телефон'}))
+#     birth_date = forms.DateField(label='', required=False, widget=forms.DateInput(attrs={'class': 'form-control','placeholder': 'Дата рождения'}))
+#     gender = forms.ChoiceField(label='', choices=Client.GENDER_CHOICES, required=False, widget=forms.Select(attrs={'class': 'form-control','placeholder': 'Пол'}))
+
+#     class Meta:
+#         model = User
+#         fields = ('username', 'email', 'password1', 'password2', 'last_name','first_name', 'second_name', 'phone_number', 'birth_date', 'gender')
+
+#         widgets = { 
+#             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Никнейм'}), 
+#             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email*'}), 
+#             'password1': forms.PasswordInput(attrs={'class': 'password','id':'#password', 'placeholder': 'Пароль*'}), 
+#             'password2': forms.PasswordInput(attrs={'class': 'password', 'placeholder': 'Подтверждение пароля*'}), 
+#         }
+
+#         labels = {
+#             'username': '',
+#             'last_name': '',
+#             'first_name': '',
+#             'second_name': '',
+#             'email': '',
+#             'phone_number': '',
+#             'birth_date': '',
+#             'gender': '',
+#             'password1': '',
+#             'password2': '',
+#         }
+#         help_texts = {
+#             'password1': '',
+#             'password2': '',
+#         }
+    
+#     def save(self, commit=True):
+#         user = super().save(commit=False)
+#         user.email = self.cleaned_data['email']
+#         if commit:
+#             user.save()
+#             client = Client(
+#                 user=user,
+#                 first_name=self.cleaned_data['first_name'],
+#                 last_name=self.cleaned_data['last_name'],
+#                 second_name=self.cleaned_data['second_name'],
+#                 phone_number=self.cleaned_data['phone_number'],
+#                 birth_date=self.cleaned_data['birth_date'],
+#                 gender=self.cleaned_data['gender']
+#             )
+#             client.save()
+#         return user
+
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Никнейм'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+
+
+    
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['title', 'text']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'text': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+
 class UserRegistrationForm(UserCreationForm):
-    email = forms.EmailField(label='',required=True, widget=forms.EmailInput(attrs={'class': 'form-control','placeholder': 'Электронная почта'}))
-    first_name = forms.CharField(label='', max_length=128, required=True, widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Имя'}))
-    last_name = forms.CharField(label='', max_length=128, required=True, widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Фамилия'}))
-    second_name = forms.CharField(label='', max_length=128, required=True, widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Отчество'}))
-    phone_number = forms.CharField(label='', max_length=15, required=True, widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Телефон'}))
-    birth_date = forms.DateField(label='', required=False, widget=forms.DateInput(attrs={'class': 'form-control','placeholder': 'Дата рождения'}))
-    gender = forms.ChoiceField(label='', choices=Client.GENDER_CHOICES, required=False, widget=forms.Select(attrs={'class': 'form-control','placeholder': 'Пол'}))
+    email = forms.EmailField(
+        label='',
+        required=True,
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Электронная почта'})
+    )
+    first_name = forms.CharField(
+        label='', 
+        max_length=128, 
+        required=True, 
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'})
+    )
+    last_name = forms.CharField(
+        label='', 
+        max_length=128, 
+        required=True, 
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'})
+    )
+    second_name = forms.CharField(
+        label='', 
+        max_length=128, 
+        required=True, 
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Отчество'})
+    )
+    phone_number = forms.CharField(
+        label='', 
+        max_length=15, 
+        required=True, 
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Телефон'})
+    )
+    birth_date = forms.DateField(
+        label='', 
+        required=False, 
+        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Дата рождения'})
+    )
+    gender = forms.ChoiceField(
+        label='', 
+        choices=Client.GENDER_CHOICES, 
+        required=False, 
+        widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Пол'})
+    )
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'last_name','first_name', 'second_name', 'phone_number', 'birth_date', 'gender')
+        fields = ('username', 'email', 'password1', 'password2', 'last_name', 'first_name', 'second_name', 'phone_number', 'birth_date', 'gender')
 
         widgets = { 
-            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Никнейм'}), 
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Никнейм'}), 
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email*'}), 
-            'password1': forms.PasswordInput(attrs={'class': 'password','id':'#password', 'placeholder': 'Пароль*'}), 
+            'password1': forms.PasswordInput(attrs={'class': 'password', 'id': '#password', 'placeholder': 'Пароль*'}), 
             'password2': forms.PasswordInput(attrs={'class': 'password', 'placeholder': 'Подтверждение пароля*'}), 
         }
 
@@ -74,6 +178,15 @@ class UserRegistrationForm(UserCreationForm):
             'password2': '',
         }
     
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+
+        # Проверяем, существует ли пользователь с таким именем
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Пользователь с таким никнеймом уже существует. Пожалуйста, выберите другой.")
+        
+        return username
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data['email']
@@ -91,21 +204,6 @@ class UserRegistrationForm(UserCreationForm):
             client.save()
         return user
 
-class CustomAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Никнейм'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-
-
-
-    
-class ReviewForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        fields = ['title', 'text']
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'text': forms.Textarea(attrs={'class': 'form-control'}),
-        }
 
 
 
@@ -130,12 +228,68 @@ class ServiceForm(forms.ModelForm):
 
 
 class ServiceFilterForm(forms.Form):
-    client = forms.ModelChoiceField(queryset=Client.objects.all(), required=False, label="Выберите клиента")
-    min_price = forms.DecimalField(min_value=0, required=False, label="Минимальная цена", widget=forms.NumberInput(attrs={'step': '0.01'}))
-    max_price = forms.DecimalField(min_value=0, required=False, label="Максимальная цена", widget=forms.NumberInput(attrs={'step': '0.01'}))
-    max_days = forms.IntegerField(min_value=0, required=False, label="Максимальное время исполнения (дни)")
-    name = forms.CharField(max_length=200, required=False, label="Поиск по названию услуги")
-    
+    client = forms.ModelChoiceField(
+        queryset=Client.objects.all(), 
+        required=False, 
+        label="Выберите клиента"
+    )
+    min_price = forms.DecimalField(
+        min_value=0, 
+        required=False, 
+        label="Минимальная цена", 
+        widget=forms.NumberInput(attrs={'step': '0.01'})
+    )
+    max_price = forms.DecimalField(
+        min_value=0, 
+        required=False, 
+        label="Максимальная цена", 
+        widget=forms.NumberInput(attrs={'step': '0.01'})
+    )
+    max_days = forms.IntegerField(
+        min_value=0, 
+        required=False, 
+        label="Максимальное время исполнения (дни)"
+    )
+    name = forms.CharField(
+        max_length=200, 
+        required=False, 
+        label="Поиск по названию услуги"
+    )
+    is_completed = forms.ChoiceField(
+        required=False,
+        label="Статус выполнения",
+        choices=[
+            ('', 'Все'), 
+            ('completed', 'Выполнено'), 
+            ('not_completed', 'Не выполнено')
+        ]
+    )
+
+    # Осуществляем общую валидацию для нескольких полей
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        min_price = cleaned_data.get('min_price')
+        max_price = cleaned_data.get('max_price')
+        max_days = cleaned_data.get('max_days')
+        
+        # Проверка: цена и дни выполнения не могут быть <= 0
+        if min_price is not None and min_price <= 0:
+            self.add_error('min_price', "Минимальная цена должна быть больше 0.")
+        
+        if max_price is not None and max_price <= 0:
+            self.add_error('max_price', "Максимальная цена должна быть больше 0.")
+        
+        if max_days is not None and max_days <= 0:
+            self.add_error('max_days', "Максимальное время исполнения должно быть больше 0.")
+
+        # Проверка: минимальная цена не может превышать максимальную
+        if min_price is not None and max_price is not None and min_price > max_price:
+            self.add_error('min_price', "Минимальная цена не может быть больше максимальной.")
+            self.add_error('max_price', "Максимальная цена не может быть меньше минимальной.")
+
+        return cleaned_data
+
 
 
 

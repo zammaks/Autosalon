@@ -1,19 +1,17 @@
 from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
-from .views import ClientViewSet, ReviewViewSet
+from .views import ClientViewSet, ReviewViewSet, ServiceViewSet
 
 # Создаем роутер и регистрируем ViewSets
 router = DefaultRouter()
 router.register(r'clients', ClientViewSet, basename='client')
-router.register(r'reviews', ReviewViewSet, basename='review')
+router.register(r'revievvs', ReviewViewSet, basename='review')
+router.register(r'services', ServiceViewSet)
 
-# Подключаем маршруты из роутера
+# Основные маршруты
 urlpatterns = [
-    path('', include(router.urls)),
-]
-# views.review_list
-urlpatterns = [
+    path('', include(router.urls)),  # Подключаем маршруты из роутера
     path('register', views.register, name='register'),
     path('login', views.login_view, name='login'),
     path('logout', views.user_logout, name='logout'),
@@ -23,6 +21,5 @@ urlpatterns = [
     path('client/<int:client_id>/add_service/', views.add_service, name='add_service'),
     path('salons/', views.salon_list, name='salon_list'),
     path('salons/add/', views.add_salon, name='add_salon'),
-    path('', include(router.urls)),
-
-]
+    path('api/reviews/my_reviews/', ReviewViewSet.as_view({'get': 'my_reviews'}), name='my_reviews'),
+] + router.urls  # Добавляем маршруты из роутера в конец списка

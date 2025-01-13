@@ -1,21 +1,19 @@
 {% extends 'main/layout.html' %}
 {% load static %}
 
-{% block title %}Отзывы{% endblock %}
+{% block title %}Мои отзывы{% endblock %}
 
 {% block content %}
 <div class="auto__wrapper">
-    <h1>Отзывы</h1>
-
+    <h1>Мои отзывы</h1>
 
     {% if user.is_authenticated %}
         <a href="{% url 'add_review' %}" class="btn btn-outline-light ml-lg-3" style="margin-left: 200px; margin-top: 10px;">Добавить отзыв</a>
-        <a href="{% url 'my_reviews' %}" class="btn btn-outline-light ml-lg-3" style="margin-left: 10px; margin-top: 10px;">Показать мои отзывы</a>
     {% endif %}
 
-    <p style="font-size: 20px;margin-top: 10px;">Всего отзывов: {{ page_obj.paginator.count }}</p>  <!-- Количество всех отзывов -->
-    <p style="font-size: 20px;">Отзывы на  странице: {{ page_obj.paginator.per_page }}</p>  <!-- Отзывы на одной странице -->
-    <p style="font-size: 20px;">Текущая страница: {{ page_obj.number }}</p>  <!-- Номер текущей страницы -->
+    <p style="font-size: 20px;margin-top: 10px;">Всего отзывов: {{ page_obj.paginator.count }}</p>
+    <p style="font-size: 20px;">Отзывы на странице: {{ page_obj.paginator.per_page }}</p>
+    <p style="font-size: 20px;">Текущая страница: {{ page_obj.number }}</p>
 
     <div class="reviews">
         {% for review in page_obj %}

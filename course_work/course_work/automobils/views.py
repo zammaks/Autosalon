@@ -6,10 +6,44 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import Announcement, FavoriteAd
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from .models import Announcement
+from .serializers import AnnouncementSerializer
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
+from .models import FavoriteAd
+
 
 def automobils_home(request):
     automobils = Announcement.objects.order_by('-date')
-    return render(request,'automobils/automobils_home.html',{'automobils': automobils})
+    
+    # Получаем параметры фильтрации из запроса
+    brand = request.GET.get('brand')
+    model = request.GET.get('model')
+
+    # Применяем фильтрацию по марке
+    if brand:
+        automobils = automobils.filter(title=brand)
+
+    # Применяем фильтрацию по модели
+    if model:
+        automobils = automobils.filter(model=model)
+
+    # Получаем все уникальные марки и модели
+    brands = Announcement.objects.values_list('title', flat=True).distinct()
+    models = Announcement.objects.values_list('model', flat=True).distinct()
+
+    # Передаем данные в контекст
+    context = {
+        'automobils': automobils,
+        'brands': brands,
+        'models': models,
+        'selected_brand': brand,
+        'selected_model': model,
+    }
+    return render(request, 'automobils/automobils_home.html', context)
 
 
 class AnnouncementDetailView(DetailView):
@@ -21,6 +55,17 @@ class AnnouncementUpdateView(UpdateView):
     model = Announcement
     template_name = 'automobils/announcement-update.html'
     form_class = AnnouncementForm
+
+class AnnouncementViewSet(viewsets.ModelViewSet):
+    """
+    API для работы с объявлениями:
+    - Получение списка объектов
+    - Получение одного объекта
+    - Создание, обновление и удаление объектов
+    """
+    queryset = Announcement.objects.all().order_by('-date')
+    serializer_class = AnnouncementSerializer
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class AnnouncementDeleteView(DeleteView):
