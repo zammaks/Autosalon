@@ -46,48 +46,38 @@ class SalonAdmin(admin.ModelAdmin):
 
 
 
-# Создайте ресурс для модели, чтобы управлять экспортом
 class ReviewResource(resources.ModelResource):
-    # Кастомизация поля title
+
     def dehydrate_title(self, review):
         """
-        Возвращает заголовок в формате 'Title: {название}'.
-        Зачем: Добавляет префикс для визуальной идентификации данных в экспортированном файле.
+        заголовок в формате 'Title: {название}'.
         """
         return f"Title: {review.title}"
 
-    # Кастомизация поля author
     def dehydrate_author(self, review):
         """
-        Возвращает имя автора в формате 'Author: {имя автора}'.
-        Зачем: Обеспечивает ясность в случае, если поле "автор" будет использоваться для обработки данных.
+        автора в формате 'Author: {имя автора}'.
         """
         return f"Author: {review.author.username}"
 
-    # Кастомизация даты создания
     def dehydrate_created_at(self, review):
         """
-        Возвращает дату создания в удобном для экспорта формате (YYYY-MM-DD HH:MM).
-        Зачем: Форматирование даты для облегчения чтения в Excel.
+        дата создания в формате (YYYY-MM-DD HH:MM).
         """
         return review.created_at.strftime('%Y-%m-%d %H:%M')
 
-    # Кастомизация текста отзыва
     def dehydrate_text(self, review):
         """
-        Обрезает текст отзыва до 100 символов и добавляет '...' для длинных отзывов.
-        Зачем: Сохраняет читаемость файла, чтобы длинные тексты не занимали слишком много места.
+         текст отзыва обрезает до 100 символов 
         """
         return review.text[:100] + ('...' if len(review.text) > 100 else '')
 
     class Meta:
         model = Review
-        fields = ('title', 'author', 'created_at', 'text')  # Поля, которые будут экспортироваться
-        export_order = ('title', 'author', 'created_at', 'text')  # Упорядочивание столбцов в экспорте
+        fields = ('title', 'author', 'created_at', 'text')
+        export_order = ('title', 'author', 'created_at', 'text') 
 
-    # Можно добавить больше кастомных методов для других полей по аналогии
 
-# Регистрируем инлайн модель для отзывов отдельно или внутри модели, если необходимо
 @admin.register(Review)
 class ReviewAdmin(ExportMixin, admin.ModelAdmin):
     resource_class = ReviewResource

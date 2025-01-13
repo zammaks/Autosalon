@@ -181,7 +181,6 @@ class UserRegistrationForm(UserCreationForm):
     def clean_username(self):
         username = self.cleaned_data.get('username')
 
-        # Проверяем, существует ли пользователь с таким именем
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError("Пользователь с таким никнеймом уже существует. Пожалуйста, выберите другой.")
         
@@ -265,7 +264,6 @@ class ServiceFilterForm(forms.Form):
         ]
     )
 
-    # Осуществляем общую валидацию для нескольких полей
     def clean(self):
         cleaned_data = super().clean()
         
@@ -273,7 +271,6 @@ class ServiceFilterForm(forms.Form):
         max_price = cleaned_data.get('max_price')
         max_days = cleaned_data.get('max_days')
         
-        # Проверка: цена и дни выполнения не могут быть <= 0
         if min_price is not None and min_price <= 0:
             self.add_error('min_price', "Минимальная цена должна быть больше 0.")
         
@@ -283,7 +280,7 @@ class ServiceFilterForm(forms.Form):
         if max_days is not None and max_days <= 0:
             self.add_error('max_days', "Максимальное время исполнения должно быть больше 0.")
 
-        # Проверка: минимальная цена не может превышать максимальную
+        # Минимальная цена не может превышать максимальную
         if min_price is not None and max_price is not None and min_price > max_price:
             self.add_error('min_price', "Минимальная цена не может быть больше максимальной.")
             self.add_error('max_price', "Максимальная цена не может быть меньше минимальной.")

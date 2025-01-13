@@ -30,17 +30,13 @@ from .serializers import ServiceSerializer
 
 
 def reviews_view(request):
-    # Получаем все отзывы, отсортированные по дате
     review_list = Review.objects.all().order_by('-created_at')
 
-    # Создаем объект пагинации: 5 отзывов на страницу
-    paginator = Paginator(review_list, 5)  # 5 отзывов на страницу
+    paginator = Paginator(review_list, 5) 
 
-    # Получаем номер страницы из GET-параметра
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # Передаем в контекст шаблона объект пагинации
     return render(request, 'accounts/review_list.html', {'page_obj': page_obj})
 
 
@@ -50,7 +46,6 @@ class ClientViewSet(viewsets.ModelViewSet):
     """
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
-    # permission_classes = [IsAuthenticatedOrReadOnly]  # Только чтение для анонимов, изменение для авторизованных
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -59,15 +54,14 @@ class ReviewViewSet(viewsets.ModelViewSet):
     """
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    # permission_classes = [IsAuthenticatedOrReadOnly]
 
     @action(methods=['GET'], detail=False)
     def my_reviews(self, request):
         """
         Возвращает отзывы текущего авторизованного пользователя.
         """
-        user = request.user  # Получаем текущего пользователя
-        reviews = Review.objects.filter(author=user)  # Отфильтровываем по автору
+        user = request.user
+        reviews = Review.objects.filter(author=user)
         serializer = self.get_serializer(reviews, many=True)
         return Response(serializer.data)
     
@@ -75,7 +69,6 @@ class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 
-    # Другие действия для Service (например, list, create, etc.)
 
     @action(methods=['POST'], detail=True, url_path='toggle-completion', url_name='toggle-completion')
     def toggle_completion(self, request, pk=None):
@@ -93,7 +86,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')  # Обновите 'home' на правильный URL
+            return redirect('home') 
     else:
         form = UserRegistrationForm()
     return render(request, 'accounts/register.html', {'form': form})
@@ -144,12 +137,10 @@ def client_services(request, client_id):
     client = get_object_or_404(Client, id=client_id)
     services = client.services.all()  # Получаем все услуги клиента
 
-    # Форма для фильтрации
+   
     form = ServiceFilterForm(request.GET)
 
-    # Если форма отправлена
     if form.is_valid():
-        # Получаем данные из формы
         selected_client = form.cleaned_data.get('client')
         min_price = form.cleaned_data.get('min_price')
         max_price = form.cleaned_data.get('max_price')
@@ -157,34 +148,31 @@ def client_services(request, client_id):
         name = form.cleaned_data.get('name')
         is_completed = form.cleaned_data.get('is_completed')
 
-        # Если выбран другой клиент, перенаправляем на его страницу
         if selected_client:
             return redirect('client_services', client_id=selected_client.id)
 
-        # Применяем фильтры
         filter_conditions = Q()
 
-        # Фильтр по названию или описанию услуги (OR)
+        # Название или описание
         if name:
             filter_conditions |= Q(name__icontains=name) | Q(description__icontains=name)
 
-        # Фильтр по цене
+        # Цена
         if min_price is not None:
             filter_conditions &= Q(price__gte=min_price)
         if max_price is not None:
             filter_conditions &= Q(price__lte=max_price)
 
-        # Фильтр по времени исполнения
+        #дни 
         if max_days is not None:
             filter_conditions &= Q(execution_time__lte=max_days)
 
-        # Фильтр по статусу выполнения
+        #статус
         if is_completed == 'completed':
             filter_conditions &= Q(is_completed=True)
         elif is_completed == 'not_completed':
             filter_conditions &= Q(is_completed=False)
 
-        # Применяем фильтрацию
         services = services.filter(filter_conditions)
 
         # Пример сложного запроса с использованием OR, AND, NOT
@@ -194,11 +182,10 @@ def client_services(request, client_id):
         # filter_conditions &= complex_query
 
 
-    # Контекст для шаблона
     context = {
         'client': client,
         'services': services,
-        'form': form,  # Передаём форму для фильтрации
+        'form': form, 
     }
 
     return render(request, 'accounts/client_services.html', context)

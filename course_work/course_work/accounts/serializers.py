@@ -5,14 +5,13 @@ from .models import Client, Review, Service, Salon
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = '__all__'  # Вы можете указать только нужные поля, например: ['id', 'user', 'phone_number', 'first_name']
+        fields = '__all__'
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = '__all__'  # Аналогично, здесь можно указать только важные поля
-
+        fields = '__all__'
 
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:

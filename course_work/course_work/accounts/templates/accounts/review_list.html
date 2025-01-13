@@ -13,9 +13,9 @@
         <a href="{% url 'my_reviews' %}" class="btn btn-outline-light ml-lg-3" style="margin-left: 10px; margin-top: 10px;">Показать мои отзывы</a>
     {% endif %}
 
-    <p style="font-size: 20px;margin-top: 10px;">Всего отзывов: {{ page_obj.paginator.count }}</p>  <!-- Количество всех отзывов -->
-    <p style="font-size: 20px;">Отзывы на  странице: {{ page_obj.paginator.per_page }}</p>  <!-- Отзывы на одной странице -->
-    <p style="font-size: 20px;">Текущая страница: {{ page_obj.number }}</p>  <!-- Номер текущей страницы -->
+    <p style="font-size: 20px;margin-top: 10px;">Всего отзывов: {{ page_obj.paginator.count }}</p>
+    <p style="font-size: 20px;">Отзывы на  странице: {{ page_obj.paginator.per_page }}</p>  
+    <p style="font-size: 20px;">Текущая страница: {{ page_obj.number }}</p> 
 
     <div class="reviews">
         {% for review in page_obj %}

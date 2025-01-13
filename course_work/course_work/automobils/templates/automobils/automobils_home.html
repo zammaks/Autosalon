@@ -6,8 +6,6 @@
 {% block content %}
 <div class="auto__wrapper">
     <h1>Объявления о продаже автомобилей</h1>
-    
-    <!-- Форма фильтрации -->
     <form method="GET" class="filters-form">
         <div class="filter">
             <label for="brand" style="margin-left: 13px; margin-bottom: 15px;margin-top: 15px; margin-right: 10px;">Марка</label >
@@ -30,12 +28,8 @@
         </div>
         <div class="filter-buttons">
             <button type="submit" class="btn btn-outline-light ml-lg-3 add mb-3" style=" width: 150px">Фильтровать</button>
-
-            <!-- Кнопка сброса фильтров -->
             <a href="{% url 'auto' %}" class="reset-button btn btn-outline-light ml-lg-3 add mb-3" style=" width: 200px; margin-left: 50px; margin-right: -50px;">Сбросить фильтры</a>
         </div>
-
-        <!-- <button type="submit" class="btn btn-outline-light ml-lg-3 add mb-3">Фильтровать</button> -->
     </form>
 
     {% if user.is_authenticated %}

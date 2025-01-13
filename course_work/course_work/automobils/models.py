@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from simple_history.models import HistoricalRecords
 
 class Announcement(models.Model):
     title = models.CharField('Бренд', max_length=50)
@@ -12,6 +13,8 @@ class Announcement(models.Model):
     price = models.IntegerField('Цена, р')
     full_text = models.TextField('Описание')
     date = models.DateTimeField('Дата публикации', default=timezone.now)
+
+    history = HistoricalRecords()
 
     def is_favorite_for_user(self, user):
         return self.favoritead_set.filter(user=user).exists()
@@ -38,6 +41,8 @@ class FavoriteAd(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
     date_added = models.DateTimeField(default=timezone.now)
+
+    history = HistoricalRecords()
 
     class Meta:
         unique_together = ('user', 'announcement')

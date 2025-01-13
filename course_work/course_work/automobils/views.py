@@ -19,23 +19,18 @@ from .models import FavoriteAd
 def automobils_home(request):
     automobils = Announcement.objects.order_by('-date')
     
-    # Получаем параметры фильтрации из запроса
     brand = request.GET.get('brand')
     model = request.GET.get('model')
 
-    # Применяем фильтрацию по марке
     if brand:
         automobils = automobils.filter(title=brand)
 
-    # Применяем фильтрацию по модели
     if model:
         automobils = automobils.filter(model=model)
 
-    # Получаем все уникальные марки и модели
     brands = Announcement.objects.values_list('title', flat=True).distinct()
     models = Announcement.objects.values_list('model', flat=True).distinct()
 
-    # Передаем данные в контекст
     context = {
         'automobils': automobils,
         'brands': brands,

@@ -1,10 +1,7 @@
 from django.contrib import admin
 from .models import Announcement, FavoriteAd
+from simple_history.admin import SimpleHistoryAdmin
 
-
-
-from django.contrib import admin
-from .models import Announcement, FavoriteAd
 
 class FavoriteAdInline(admin.TabularInline):
     model = FavoriteAd
@@ -34,5 +31,14 @@ class FavoriteAdAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'announcement__title')
     raw_id_fields = ('user', 'announcement')
 
-admin.site.register(Announcement, AnnouncementAdmin)
-admin.site.register(FavoriteAd, FavoriteAdAdmin)
+
+@admin.register(Announcement)
+class AnnouncementAdmin(SimpleHistoryAdmin):
+    list_display = ('title', 'model', 'price', 'date')
+
+@admin.register(FavoriteAd)
+class FavoriteAdAdmin(SimpleHistoryAdmin):
+    list_display = ('user', 'announcement', 'date_added')
+
+# admin.site.register(Announcement, AnnouncementAdmin)
+# admin.site.register(FavoriteAd, FavoriteAdAdmin)
